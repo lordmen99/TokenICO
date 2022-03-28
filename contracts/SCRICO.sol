@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./ScorpionToken.sol";
+import {ScorpionToken} from "./ScorpionToken.sol";
 
 contract SCRICO {   
 
@@ -55,7 +55,7 @@ contract SCRICO {
         require(msg.value * price <= availableTokens, 'not enough tokens left for sale');
         
         availableTokens -= msg.value * price;
-        
+
         sales.push(Sale(
             msg.sender, 
             msg.value * price
@@ -77,6 +77,14 @@ contract SCRICO {
         _to.transfer(address(this).balance);
     }
 
+    function getSale(address _investor) external view returns(uint){
+        for(uint i=0;i<sales.length;i++){
+            if(sales[i].investor == _investor){
+                return sales[i].amount;
+            }
+        }
+        return 0;
+    }
     
     modifier onlyAdmin() {
         require(msg.sender == admin, 'only admin can do it');
